@@ -1,15 +1,40 @@
 Answers to the pre quiz:
 
-1.
-2.
-3.
-4.
-5.
-6.
-7.
-8.
-9.
-10.
-11.
-12.
-13.
+
+1. What is the difference between a set, a bag, and a sequence?
+	A set is a grouping of elements that have a connection to one another
+	A bag is a grouping of elements and/or sets that are stored for use later
+	A sequence is a series of steps that a process can follow, 	
+2. What is a language (in terms of sets and sequences)?
+	A language is made up of sequences(executable rulesets) and sets(syntacticle parts).  No clue.
+3. What is a compiler? Name some.
+	A compiler is what takes your source code and converts it into machinee code then sends it off to the interpreter. (might be opposite) 
+4. What is an interpreter? How does that differ from a compiler?
+	An interpreter receives the compiled code and converts it from machine code to binary as opposed to taking source code and translating it to machine code.(might have these backwards)
+5. What is the derivative of a language?
+	A derivative of a language is a language that takes much of it's precedence from a previous programming language and improves upon it or specializes it for a specific need, ie c -> c++ or swift being a derivitive of c# or whatever it is.
+6. What is a regular expression?
+	A regular expression is a statement that is used for character matching a different statement.  Ex $um =~(..); //cpatures any 2 character series
+
+7. What is a finite automaton, and what is the difference between an NFA and a DFA?
+	I don't know.
+
+8.  What is a grammar, and what is the difference between regular grammars, context-free grammars, LL(k) and LR(k)?
+	A grammer is the syntactical structure of a language or the rules that the language must follow to be proper.
+
+9.  What is the difference between derivative parsing, recursive-descent parsing, shift-reduce parsing and parser combinators?
+	I don't know.
+
+10. What is a visitor?
+	Not sure.
+
+11. What is the difference between a parse tree and an abstract syntax tree?
+	No clue.
+
+12. Name some optimizations.
+	Search space optimizations
+	Search speed improvements
+	Input size prepass to eleminate redundent paths
+
+13. What questions do you have for me?
+	Compilers seem to have a lot in common with language processing and parsers of that nature(game interpreters for example) what's the best overlap in this area?
