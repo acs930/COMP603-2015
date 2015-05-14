@@ -1,0 +1,14 @@
+Findings from compiler source:  GCC
+
+Files within the gcc/config folder seem to check for various standard library headers that your program would be linked to.  IT also seems like all the config parts are m4 file format which is a macro processor found on all Unix machines
+
+The header for regex for defining syntax is found in gcc/xregex2.h, it includes backslash escape lists, character classes, braces, parens, and all the other stuff. Things are determined by bits being set or not.  The header also contains the regexes for the error codes that can be returned when found(unmatched parens, ran out of memory, etc).  There's a buffer in which the compiled pattern is stored, there's a translation table for for characters pre comparison and is applied after the string is matched.
+
+The bulk of the actual compiler lives in the gcc.c file, it's almost 10,000 lines of code, so it does a lot.  Involves running several different programs and passing temp files between them, forwarding users switches to the programs on a selective basis and getting rid of the temp files after. (it uses xregex.h, not xreregex2.h)  It contains a whole section on the specs language:  strings containing lines made up of a program name and arguments, starts from root and goes to the file.  
+
+There's a section on running the linker after compiling everything
+A list of compilers it can compile to is found around 1000, includes: obj C, c++, fortran, pascal, java, go and more.
+
+The spec determines what it actually is going to compile to based on thefile name.  The read_specs function deos this it seems.  Around 3100 there  are all the bash options for gcc.  Around 5800 we get to some function compilation checking to make sure the function names are correct. Then the handle braces function follows that.  Follwing that is the process brace body function which handles thwhat's inside of the braces. around 8000 we have validation functions for the huge amount of switch cases that were used to determine what it was going to compile to. 
+
+So it essentially looks for all the different libraries and code you specify at the top of a program, finds all of these, determines what kind of file you are trying to compile and forms a spec off of this, sends all the code off to temporary files that can be processed by the correct compiler, actually compiles the code, the combines everything and cleans up.
