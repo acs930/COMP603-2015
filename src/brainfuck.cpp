@@ -32,6 +32,8 @@ class CommandNode;
 class Loop;
 class Program;
 
+void parseInnerLoop(fstream & file, Program * program, Loop* outerLoop);
+
 /**
  * Visits?!? Well, that'd indicate visitors!
  * A visitor is an interface that allows you to walk through a tree and do stuff.
@@ -104,16 +106,55 @@ class Program : public Node {
 void parse(fstream & file, Program * program) {
     char c;
     // How to peek at the next character
-    c = (char)file.peek();
+    //c = (char)file.peek();
+
+    if (file >> c){
+
+    if(c == '['){
+        Loop* ermergerdlerp = new Loop();
+
+        //program->children.push_back(new Loop());
+
+
+        while((char)file.peek() != ']')
+        {
+            if((char)file.peek() == '['){
+                file >> c;
+                parseInnerLoop(file, program, ermergerdlerp);
+            }
+            
+            file >> c;
+            //cout << c << endl;
+            ermergerdlerp->children.push_back(new CommandNode(c));
+            
+        }
+        file >> c;
+        program->children.push_back(ermergerdlerp);
+        //file >> c;
+        //program->children.push_back(new Loop());
+
+         //program->children.push_back(new CommandNode(c));
+    }
+    else
+        program->children.push_back(new CommandNode(c));
+
+    parse(file, program);
+    }
+    else
+        return;
+    
+
     // How to print out that character
-    cout << c;
+    //cout << c;
     // How to read a character from the file and advance to the next character
-    file >> c;
+    //file >> c;
     // How to print out that character
-    cout << c;
+    //cout << c;
     // How to insert a node into the program.
-    program->children.push_back(new CommandNode(c));
+    //program->children.push_back(new CommandNode(c));
 }
+
+
 
 /**
  * A printer for Brainfuck abstract syntax trees.
@@ -143,6 +184,7 @@ class Printer : public Visitor {
             for (vector<Node*>::const_iterator it = program->children.begin(); it != program->children.end(); ++it) {
                 (*it)->accept(this);
             }
+            cout << '\n';
         }
 };
 
@@ -160,4 +202,28 @@ int main(int argc, char *argv[]) {
             file.close();
         }
     }
+}
+
+
+
+
+void parseInnerLoop(fstream & file, Program * program, Loop* outerLoop)
+{
+    char c;
+    Loop* ermergerdirnnerlerp = new Loop();
+    while((char)file.peek() != ']')
+        {
+            if((char)file.peek() == '['){
+                file >> c;
+                parseInnerLoop(file, program, ermergerdirnnerlerp);
+            }
+            else{
+                file >> c;
+                //cout << c << endl;
+                ermergerdirnnerlerp->children.push_back(new CommandNode(c));
+            }
+        }
+    file >> c;
+    outerLoop->children.push_back(ermergerdirnnerlerp);
+    return;
 }
