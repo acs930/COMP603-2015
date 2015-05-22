@@ -32,7 +32,6 @@ class CommandNode;
 class Loop;
 class Program;
 
-void parseInnerLoop(fstream & file, Program * program, Loop* outerLoop);
 
 /**
  * Visits?!? Well, that'd indicate visitors!
@@ -75,35 +74,43 @@ class CommandNode : public Node {
         }
 };
 
+class Container: public Node {
+    public:
+        vector<Node*> children;
+        virtual void accept (Visitor * v) = 0;
+};
+
 /**
  * Loop publicly extends Node to accept visitors.
  * Loop represents a loop in Brainfuck.
  */
-class Loop : public Node {
+class Loop : public Container {
     public:
-        vector<Node*> children;
         void accept (Visitor * v) {
             v->visit(this);
         }
 };
+
 
 /**
  * Program is the root of a Brainfuck program abstract syntax tree.
  * Because Brainfuck is so primitive, the parse tree is the abstract syntax tree.
  */
-class Program : public Node {
+class Program : public Container {
     public:
-        vector<Node*> children;
         void accept (Visitor * v) {
             v->visit(this);
         }
 };
 
+void parseInnerLoop(fstream & file, Container * container, Loop* outerLoop);
+
+
 /**
  * Read in the file by recursive descent.
  * Modify as necessary and add whatever functions you need to get things done.
  */
-void parse(fstream & file, Program * program) {
+void parse(fstream & file, Container * container) {
     char c;
     // How to peek at the next character
     //c = (char)file.peek();
@@ -120,7 +127,7 @@ void parse(fstream & file, Program * program) {
         {
             if((char)file.peek() == '['){
                 file >> c;
-                parseInnerLoop(file, program, ermergerdlerp);
+                parseInnerLoop(file, container, ermergerdlerp);
             }
             
             file >> c;
@@ -129,16 +136,16 @@ void parse(fstream & file, Program * program) {
             
         }
         file >> c;
-        program->children.push_back(ermergerdlerp);
+        container->children.push_back(ermergerdlerp);
         //file >> c;
         //program->children.push_back(new Loop());
 
          //program->children.push_back(new CommandNode(c));
     }
     else
-        program->children.push_back(new CommandNode(c));
+        container->children.push_back(new CommandNode(c));
 
-    parse(file, program);
+    parse(file, container);
     }
     else
         return;
@@ -152,6 +159,11 @@ void parse(fstream & file, Program * program) {
     //cout << c;
     // How to insert a node into the program.
     //program->children.push_back(new CommandNode(c));
+
+    //cout << c;
+    // How to insert a node into the container.
+    //container->children.push_back(new CommandNode(c));
+
 }
 
 
@@ -207,7 +219,7 @@ int main(int argc, char *argv[]) {
 
 
 
-void parseInnerLoop(fstream & file, Program * program, Loop* outerLoop)
+void parseInnerLoop(fstream & file, Container * container, Loop* outerLoop)
 {
     char c;
     Loop* ermergerdirnnerlerp = new Loop();
@@ -215,7 +227,7 @@ void parseInnerLoop(fstream & file, Program * program, Loop* outerLoop)
         {
             if((char)file.peek() == '['){
                 file >> c;
-                parseInnerLoop(file, program, ermergerdirnnerlerp);
+                parseInnerLoop(file, container, ermergerdirnnerlerp);
             }
             else{
                 file >> c;
