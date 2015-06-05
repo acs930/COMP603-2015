@@ -78,6 +78,18 @@ class CommandNode : public Node {
                 case '.': command = OUTPUT; break;
             }
         }
+        CommandNode(char c, int count) {
+            for(int i = 0; i < count; i++){
+                switch(c) {
+                    case '+': command = INCREMENT; break;
+                    case '-': command = DECREMENT; break;
+                    case '<': command = SHIFT_LEFT; break;
+                    case '>': command = SHIFT_RIGHT; break;
+                    case ',': command = INPUT; break;
+                    case '.': command = OUTPUT; break;
+                }
+            }
+        }
         void accept (Visitor * v) {
             v->visit(this);
         }
@@ -121,6 +133,7 @@ void parseInnerLoop(fstream & file, Container * container, Loop* outerLoop);
  */
 void parse(fstream & file, Container * container) {
     char c;
+    int commandCount;
     // How to peek at the next character
     //c = (char)file.peek();
 
@@ -151,8 +164,21 @@ void parse(fstream & file, Container * container) {
 
          //program->children.push_back(new CommandNode(c));
     }
-    else
-        container->children.push_back(new CommandNode(c));
+    else{
+                            cout << "stuck";
+
+            if(c == (char)file.peek()){
+                while(c == (char)file.peek())
+                {
+                    cout << "stuck";
+                    file >> c;
+                    commandCount++;
+                }
+                container->children.push_back(new CommandNode(c, commandCount));
+            }
+            else
+                container->children.push_back(new CommandNode(c));
+    }
 
     parse(file, container);
     }
@@ -329,6 +355,7 @@ void printOutput()
 void parseInnerLoop(fstream & file, Container * container, Loop* outerLoop)
 {
     char c;
+    int commandCount = 0;
     Loop* ermergerdirnnerlerp = new Loop();
     while((char)file.peek() != ']')
         {
@@ -339,7 +366,18 @@ void parseInnerLoop(fstream & file, Container * container, Loop* outerLoop)
             else{
                 file >> c;
                 //cout << c << endl;
-                ermergerdirnnerlerp->children.push_back(new CommandNode(c));
+                if(c == (char)file.peek()){
+                    while(c == (char)file.peek())
+                    {
+                        file >> c;
+                        cout << "stuck";
+                        commandCount++;
+                    }
+                    ermergerdirnnerlerp->children.push_back(new CommandNode(c, commandCount));
+                }
+                else
+                    ermergerdirnnerlerp->children.push_back(new CommandNode(c));
+
             }
         }
     file >> c;
