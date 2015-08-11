@@ -327,7 +327,7 @@ int main(int argc, char *argv[]) {
     Interpreter interpreter;
     
 
-    
+//optimization
     if (argc == 1) {
         cout << argv[0] << ": No input files." << endl;
     } else if (argc > 1) {
